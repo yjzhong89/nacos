@@ -112,7 +112,7 @@ public class NamingProxy {
 
     public static boolean syncData(byte[] data, String curServer) {
         Map<String, String> headers = new HashMap<>(128);
-        
+
         headers.put(HttpHeaderConsts.CLIENT_VERSION_HEADER, VersionUtils.VERSION);
         headers.put(HttpHeaderConsts.USER_AGENT_HEADER, UtilsAndCommons.SERVER_VERSION);
         headers.put("Accept-Encoding", "gzip,deflate,sdch");
@@ -120,6 +120,7 @@ public class NamingProxy {
         headers.put("Content-Encoding", "gzip");
 
         try {
+            // DistroController.onSyncDatum
             HttpClient.HttpResult result = HttpClient.httpPutLarge("http://" + curServer + RunningConfig.getContextPath()
                 + UtilsAndCommons.NACOS_NAMING_CONTEXT + DATA_ON_SYNC_URL, headers, data);
             if (HttpURLConnection.HTTP_OK == result.code) {

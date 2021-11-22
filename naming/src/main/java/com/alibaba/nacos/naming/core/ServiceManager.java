@@ -629,6 +629,7 @@ public class ServiceManager implements RecordListener<Service> {
     }
 
     public Service getService(String namespaceId, String serviceName) {
+        // serviceMap就是注册表
         if (serviceMap.get(namespaceId) == null) {
             return null;
         }
@@ -648,7 +649,7 @@ public class ServiceManager implements RecordListener<Service> {
                 }
             }
         }
-        // 根据key把空map拿出来在put一个
+        // 根据key把空map拿出来再put一个
         serviceMap.get(service.getNamespaceId()).put(service.getName(), service);
     }
 
@@ -658,7 +659,6 @@ public class ServiceManager implements RecordListener<Service> {
         // 初始化服务 --- 健康检查
         service.init();
         // 为什么是两次listen？
-        //
         consistencyService.listen(KeyBuilder.buildInstanceListKey(service.getNamespaceId(), service.getName(), true), service);
         consistencyService.listen(KeyBuilder.buildInstanceListKey(service.getNamespaceId(), service.getName(), false), service);
         Loggers.SRV_LOG.info("[NEW-SERVICE] {}", service.toJSON());

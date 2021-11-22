@@ -83,7 +83,7 @@ public class ClientBeatCheckTask implements Runnable {
 
             // first set health status of instances:
             for (Instance instance : instances) {
-                // 当前时间减去客户端最后一次发送心跳时间大于默认超时时间
+                // 当前时间减去客户端最后一次发送心跳时间大于默认超时时间15s
                 if (System.currentTimeMillis() - instance.getLastBeat() > instance.getInstanceHeartBeatTimeOut()) {
                     if (!instance.isMarked()) {
                         if (instance.isHealthy()) {
@@ -112,6 +112,7 @@ public class ClientBeatCheckTask implements Runnable {
                     continue;
                 }
 
+                // 如果超过30s，那么就直接删除(删除方法)
                 if (System.currentTimeMillis() - instance.getLastBeat() > instance.getIpDeleteTimeout()) {
                     // delete instance
                     Loggers.SRV_LOG.info("[AUTO-DELETE-IP] service: {}, ip: {}", service.getName(), JSON.toJSONString(instance));

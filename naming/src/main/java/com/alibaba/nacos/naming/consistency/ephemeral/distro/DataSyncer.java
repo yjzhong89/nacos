@@ -113,6 +113,7 @@ public class DataSyncer {
             byte[] data = serializer.serialize(datumMap);
 
             long timestamp = System.currentTimeMillis();
+            // 同步数据
             boolean success = NamingProxy.syncData(data, task.getTargetServer());
             if (!success) {
                 SyncTask syncTask = new SyncTask();
@@ -120,6 +121,7 @@ public class DataSyncer {
                 syncTask.setRetryCount(task.getRetryCount() + 1);
                 syncTask.setLastExecuteTime(timestamp);
                 syncTask.setTargetServer(task.getTargetServer());
+                // 重试
                 retrySync(syncTask);
             } else {
                 // clear all flags of this task:

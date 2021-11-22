@@ -114,7 +114,8 @@ public class TaskDispatcher {
                     keys.add(key);
                     dataSize++;
 
-                    // 默认达到1000个
+                    // 如果注册的实例达到一定数量(默认为1000)就会批量同步给nacos集群中的其他节点
+                    // 或者距离上一次节点同步达到一定时间(默认2s)，也会开始批量同步
                     if (dataSize == partitionConfig.getBatchSyncKeyCount() ||
                         (System.currentTimeMillis() - lastDispatchTime) > partitionConfig.getTaskDispatchPeriod()) {
 

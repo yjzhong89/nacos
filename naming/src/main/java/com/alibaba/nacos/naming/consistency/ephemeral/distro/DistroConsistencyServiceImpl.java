@@ -112,6 +112,7 @@ public class DistroConsistencyServiceImpl implements EphemeralConsistencyService
             @Override
             public void run() {
                 try {
+                    // 加载数据，需要判断是单机模式还是集群模式
                     load();
                 } catch (Exception e) {
                     Loggers.DISTRO.error("load data failed.", e);
@@ -199,6 +200,7 @@ public class DistroConsistencyServiceImpl implements EphemeralConsistencyService
             datum.value = (Instances) value;
             datum.key = key;
             datum.timestamp.incrementAndGet();
+            // 添加到dataStore中
             dataStore.put(key, datum);
         }
 
@@ -413,6 +415,7 @@ public class DistroConsistencyServiceImpl implements EphemeralConsistencyService
                 services.put(datumKey, StringUtils.EMPTY);
             }
             // 向tasks队列中添加一个事件
+            // 在哪里执行这个任务？
             tasks.add(Pair.with(datumKey, action));
         }
 
@@ -426,7 +429,7 @@ public class DistroConsistencyServiceImpl implements EphemeralConsistencyService
 
             while (true) {
                 try {
-
+                    // 从tasks队列中获取任务
                     Pair pair = tasks.take();
 
                     if (pair == null) {
