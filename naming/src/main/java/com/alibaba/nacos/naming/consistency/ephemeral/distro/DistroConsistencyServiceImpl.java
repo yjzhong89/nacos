@@ -122,6 +122,8 @@ public class DistroConsistencyServiceImpl implements EphemeralConsistencyService
 
         // 执行notifier的run方法，执行监听器
         executor.submit(notifier);
+        // 将从远程Nacos服务器加载任务添加到定时任务中
+        // 这里会再一次执行load方法去加载远程Nacos服务数据，有没有问题？
         GlobalExecutor.submit(loadDataTask);
     }
 
@@ -150,7 +152,8 @@ public class DistroConsistencyServiceImpl implements EphemeralConsistencyService
             initialized = true;
             return;
         }
-        // 当前服务集群当中所有健康的实例
+
+        // 当前服务集群中所有健康的实例<=1，说明目前集群中只有本机是健康的，需要进行等待
         // size = 1 means only myself in the list, we need at least one another server alive:
         while (serverListManager.getHealthyServers().size() <= 1) {
             Thread.sleep(1000L);
@@ -167,6 +170,7 @@ public class DistroConsistencyServiceImpl implements EphemeralConsistencyService
                 Loggers.DISTRO.debug("sync from " + server);
             }
             // try sync data from remote server:
+            // 从远程Nacos服务器同步数据，只要同步成功一次就返回
             if (syncAllDataFromRemote(server)) {
                 initialized = true;
                 return;
