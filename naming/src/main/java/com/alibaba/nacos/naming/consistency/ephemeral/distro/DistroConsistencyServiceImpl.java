@@ -414,7 +414,7 @@ public class DistroConsistencyServiceImpl implements EphemeralConsistencyService
             if (action == ApplyAction.CHANGE) {
                 services.put(datumKey, StringUtils.EMPTY);
             }
-            // 向tasks队列中添加一个事件
+            // 向tasks队列中添加一个任务
             // 在哪里执行这个任务？
             tasks.add(Pair.with(datumKey, action));
         }

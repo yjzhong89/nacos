@@ -498,7 +498,7 @@ public class ServiceManager implements RecordListener<Service> {
     }
 
     public void addInstance(String namespaceId, String serviceName, boolean ephemeral, Instance... ips) throws NacosException {
-
+        // 构建key，默认为ephemeral
         String key = KeyBuilder.buildInstanceListKey(namespaceId, serviceName, ephemeral);
 
         Service service = getService(namespaceId, serviceName);
@@ -560,7 +560,7 @@ public class ServiceManager implements RecordListener<Service> {
     }
 
     public List<Instance> updateIpAddresses(Service service, String action, boolean ephemeral, Instance... ips) throws NacosException {
-
+        // 根据key获取原有的服务实例信息
         Datum datum = consistencyService.get(KeyBuilder.buildInstanceListKey(service.getNamespaceId(), service.getName(), ephemeral));
 
         List<Instance> currentIPs = service.allIPs(ephemeral);
@@ -590,6 +590,7 @@ public class ServiceManager implements RecordListener<Service> {
             }
 
             if (UtilsAndCommons.UPDATE_INSTANCE_ACTION_REMOVE.equals(action)) {
+                // 如果是删除服务实例
                 instanceMap.remove(instance.getDatumKey());
             } else {
                 instance.setInstanceId(instance.generateInstanceId(currentInstanceIds));

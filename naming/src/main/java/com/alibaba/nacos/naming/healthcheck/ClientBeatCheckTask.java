@@ -71,6 +71,7 @@ public class ClientBeatCheckTask implements Runnable {
     @Override
     public void run() {
         try {
+            // 客户端的健康检查任务只在一台nacos服务器上进行
             if (!getDistroMapper().responsible(service.getName())) {
                 return;
             }

@@ -105,6 +105,7 @@ public class BeatReactor {
             }
             long nextTime = beatInfo.getPeriod();
             try {
+                // 通过http请求发送实例心跳
                 JSONObject result = serverProxy.sendBeat(beatInfo, BeatReactor.this.lightBeatEnabled);
                 long interval = result.getIntValue("clientBeatInterval");
                 boolean lightBeatEnabled = false;

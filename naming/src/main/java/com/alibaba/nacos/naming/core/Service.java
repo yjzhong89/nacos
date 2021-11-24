@@ -249,7 +249,7 @@ public class Service extends com.alibaba.nacos.api.naming.pojo.Service implement
         }
 
         setLastModifiedMillis(System.currentTimeMillis());
-        // 广播一个消息
+        // 广播一个服务变更事件
         getPushService().serviceChanged(this);
         StringBuilder stringBuilder = new StringBuilder();
 

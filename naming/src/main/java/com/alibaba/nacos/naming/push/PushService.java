@@ -342,7 +342,7 @@ public class PushService implements ApplicationContextAware, ApplicationListener
             return;
         }
 
-        // 发送ServiceChangeEvent事件，监听该事件的bean就会调用onApplicationEvent方法(PushService)
+        // 发送ServiceChangeEvent事件，监听该事件的bean就会调用onApplicationEvent方法(PushService.onApplicationEvent)
         this.applicationContext.publishEvent(new ServiceChangeEvent(this, service));
     }
 

@@ -478,6 +478,7 @@ public class InstanceController {
 
         List<Instance> srvedIPs;
 
+        // 获取所有客户端实例信息
         srvedIPs = service.srvIPs(Arrays.asList(StringUtils.split(clusters, ",")));
 
         // filter ips using selector:

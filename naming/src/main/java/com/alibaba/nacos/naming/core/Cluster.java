@@ -181,12 +181,19 @@ public class Cluster extends com.alibaba.nacos.api.naming.pojo.Cluster implement
         return cluster;
     }
 
+    /**
+     * 将需要更改的实例信息与原有的信息进行对比，然后将原有信息进行整体替换
+     * 更改的实例只是某个cluster包含的实例信息列表
+     * @param ips
+     * @param ephemeral
+     */
     public void updateIPs(List<Instance> ips, boolean ephemeral) {
 
         Set<Instance> toUpdateInstances = ephemeral ? ephemeralInstances : persistentInstances;
 
         HashMap<String, Instance> oldIPMap = new HashMap<>(toUpdateInstances.size());
 
+        // 将原有的实例信息保存在oldIPMap中
         for (Instance ip : toUpdateInstances) {
             oldIPMap.put(ip.getDatumKey(), ip);
         }
@@ -240,6 +247,7 @@ public class Cluster extends com.alibaba.nacos.api.naming.pojo.Cluster implement
         toUpdateInstances = new HashSet<>(ips);
 
         // 更新内存中实例注册表
+        // 使用了copy-on-write技术
         if (ephemeral) {
             ephemeralInstances = toUpdateInstances;
         } else {

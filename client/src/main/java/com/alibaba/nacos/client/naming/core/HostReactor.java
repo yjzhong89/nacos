@@ -283,7 +283,7 @@ public class HostReactor {
     public void updateServiceNow(String serviceName, String clusters) {
         ServiceInfo oldService = getServiceInfo0(serviceName, clusters);
         try {
-
+            // 这里会将udp的端口也传给nacos服务器，主要是便于nacos服务器的service信息变更时，可以通过udp发送服务注册信息给客户端
             String result = serverProxy.queryList(serviceName, clusters, pushReceiver.getUDPPort(), false);
 
             if (StringUtils.isNotEmpty(result)) {
